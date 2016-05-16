@@ -33,19 +33,19 @@ while [ -n "$1" ]; do
     case "$1" in
       -h) info 0;;
       -F) shift
-	  [ -n "$1" ] 
+	  [ -n "$1" ]
 	  FTPADDRESS=$1
 	  ;;
       -U) shift
-	  [ -n "$1" ] 
+	  [ -n "$1" ]
 	  FTPUSER=$1
 	  ;;
 	  -P) shift
-	  [ -n "$1" ] 
+	  [ -n "$1" ]
 	  FTPPASSWORD=$1
 	  ;;
 	  -C) shift
-	  [ -n "$1" ] 
+	  [ -n "$1" ]
 	  CUSTOMERNAME=$1
 	  ;;
       *) echo "Invalid option $1"; echo; info 1;;
@@ -60,42 +60,47 @@ LOGFILENAME="$CUSTOMERNAME-$HOST-CloudLink_Info-$(date +"%m_%d_%Y")"
 rm -f $LOGFILENAME* 2> /dev/null
 
 
-#Create the log file 
-echo "###Output of 'ls -l /sys/class/block/' " 1>&2 > $LOGFILENAME 
-ls -l /sys/class/block/ 2> /dev/null  >> $LOGFILENAME 
+#Create the log file
+echo "###Output of 'ls -l /sys/class/block/' " 1>&2 > $LOGFILENAME
+ls -l /sys/class/block/ 2> /dev/null  >> $LOGFILENAME
 
-echo "###Output of 'ls -l /dev/mapper/'" 1>&2 >> $LOGFILENAME 
-ls -l /dev/mapper/ 2> /dev/null >> $LOGFILENAME 
+echo "###Output of 'ls -l /dev/mapper/'" 1>&2 >> $LOGFILENAME
+ls -l /dev/mapper/ 2> /dev/null >> $LOGFILENAME
 
-echo "###Output of 'blkid'" 1>&2 >> $LOGFILENAME 
-blkid 2>&1  >> $LOGFILENAME 
+echo "###Output of 'blkid'" 1>&2 >> $LOGFILENAME
+blkid 2>&1  >> $LOGFILENAME
 
-echo "###Output of 'blkid -c /dev/null'" 1>&2 >> $LOGFILENAME 
-blkid -c /dev/null 2> /dev/null >> $LOGFILENAME 
+echo "###Output of 'blkid -c /dev/null'" 1>&2 >> $LOGFILENAME
+blkid -c /dev/null 2> /dev/null >> $LOGFILENAME
 
-echo "###Output of 'lsblk -i' " 1>&2 >> $LOGFILENAME 
-lsblk -i 2> /dev/null  >> $LOGFILENAME 
+echo "###Output of 'lsblk -i' " 1>&2 >> $LOGFILENAME
+lsblk -i 2> /dev/null  >> $LOGFILENAME
 
 echo "###Output of 'dmsetup dep'" 2>&1 >> $LOGFILENAME
-dmsetup deps 2> /dev/null  >> $LOGFILENAME 
+dmsetup deps 2> /dev/null  >> $LOGFILENAME
 
-echo "###Output of 'cat /proc/mounts'" 2>&1 >> $LOGFILENAME 
-cat /proc/mounts 2> /dev/null  >> $LOGFILENAME 
+echo "###Output of 'cat /proc/mounts'" 2>&1 >> $LOGFILENAME
+cat /proc/mounts 2> /dev/null  >> $LOGFILENAME
 
 echo "###Output of 'ls -l /usr/share/initramfs-tools/hooks/'" 2>&1 >> $LOGFILENAME
-ls -l /usr/share/initramfs-tools/hooks/ 2> /dev/null  >> $LOGFILENAME 
+ls -l /usr/share/initramfs-tools/hooks/ 2> /dev/null  >> $LOGFILENAME
 
-echo "###Output of 'ls -l /usr/lib/systemd'" 2>&1 >> $LOGFILENAME 
-ls -l /usr/lib/systemd/ 2> /dev/null >> $LOGFILENAME 
+echo "###Output of 'ls -l /usr/lib/systemd'" 2>&1 >> $LOGFILENAME
+ls -l /usr/lib/systemd/ 2> /dev/null >> $LOGFILENAME
 
-echo "###Output of 'ls -l /usr/share/dracut/'" 2>&1 >> $LOGFILENAME 
-ls -l /usr/share/dracut/ 2> /dev/null  >> $LOGFILENAME 
+echo "###Output of 'ls -l /usr/share/dracut/'" 2>&1 >> $LOGFILENAME
+ls -l /usr/share/dracut/ 2> /dev/null  >> $LOGFILENAME
 
-echo "###Output of 'ls -l /usr/lib/dracut/'" 2>&1 >> $LOGFILENAME 
-ls -l /usr/lib/dracut/ 2> /dev/null  >> $LOGFILENAME 
+echo "###Output of 'ls -l /usr/lib/dracut/'" 2>&1 >> $LOGFILENAME
+ls -l /usr/lib/dracut/ 2> /dev/null  >> $LOGFILENAME
 
 echo "###Output of 'ls -l /lib/mkinitrd/'" 2>&1 >> $LOGFILENAME
-ls -l /lib/mkinitrd/ 2> /dev/null  >> $LOGFILENAME 
+ls -l /lib/mkinitrd/ 2> /dev/null  >> $LOGFILENAME
+
+echo "###Output of '/etc/resolv.conf'" 2>&1 >> $LOGFILENAME
+cat /etc/resolv.conf 2> /dev/null  >> $LOGFILENAME
+
+
 
 echo "###End of logging" >> $LOGFILENAME
 
@@ -108,7 +113,7 @@ if [ -f /boot/grub/grub.cfg  ]; then
 		echo ""
 	fi
 fi
-		
+
 if [ -f /boot/grub/grub.conf ]; then
 	if [[ $(more /etc/grub.conf | grep -e LVM) ]]; then
 		echo "$(tput setaf 1)Warning: Possible Grub Configuratoin Issue$(tput sgr 0)"
@@ -118,7 +123,7 @@ fi
 
 #Collect files into tar
 tar -cf $LOGFILENAME.tar $LOGFILENAME
-tar -rf $LOGFILENAME.tar /etc/*-release /etc/fstab /boot/grub/grub.cfg /boot/grub/grub.conf /boot/grub/menu.lst /boot/grub2/grub.cfg /boot/grub2/grub.conf /boot/grub2/menu.lst 2> /dev/null
+tar -rf $LOGFILENAME.tar /etc/*-release /etc/fstab /etc/dhcp/dhclient.conf /boot/grub/grub.cfg /boot/grub/grub.conf /boot/grub/menu.lst /boot/grub2/grub.cfg /boot/grub2/grub.conf /boot/grub2/menu.lst 2> /dev/null
 
 #Remove the temp log file
 rm -f $LOGFILENAME
