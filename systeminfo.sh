@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 # Description:       Script to collect and upload customer Linux configuration info
-
+#v1.0
 #Replace the following with valid FTP details
 #EMC Employees can use https://ftpaccreq.isus.emc.com/ to request a temporary account
 #If no command line options are specified, these details will be used
@@ -99,8 +99,6 @@ ls -l /lib/mkinitrd/ 2> /dev/null  >> $LOGFILENAME
 
 echo "###Output of '/etc/resolv.conf'" 2>&1 >> $LOGFILENAME
 cat /etc/resolv.conf 2> /dev/null  >> $LOGFILENAME
-
-
 
 echo "###End of logging" >> $LOGFILENAME
 
